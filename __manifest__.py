@@ -8,7 +8,7 @@
     """,
     'author': 'Salah',
     'category': 'Tools',
-    'depends': ['base', 'mail'],
+    'depends': ['base', 'mail','contacts'],
     'assets': {
 
     },
@@ -16,6 +16,7 @@
         'security/ir.model.access.csv',
         'views/base_menu.xml',
         'views/tasks_view.xml',
+        'reports/task_report.xml',
 
 
 

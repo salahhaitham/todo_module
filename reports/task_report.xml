@@ -1,0 +1,155 @@
+<odoo>
+
+    <record id="task_report_id" model="ir.actions.report">
+        <field name="name">Task Report</field>
+        <field name="model">task</field>
+        <field name="report_type">qweb-pdf</field>
+
+        <field name="report_name">todo_addon.task_template_id</field>
+        <field name="report_file">todo_addon.task_template_id</field>
+
+        <field name="binding_model_id" ref="model_task"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <template id="task_template_id">
+
+        <t t-call="web.html_container">
+
+            <!-- الصح: نستخدم docs -->
+            <t t-foreach="docs" t-as="doc">
+
+                <t t-call="web.external_layout">
+
+                    <div class="page" style="border:2px solid #3f51b5; padding:20px;">
+
+                        <!-- HEADER -->
+                        <div style="border:1px solid #3f51b5; padding:10px; width:40%;">
+                            <div><strong>Company logo</strong></div>
+                            <div t-out="res_company.partner_id.contact_address"/>
+                            <div t-out="res_company.phone"/>
+                        </div>
+
+                        <br/>
+
+                        <!-- TASK BOX -->
+                        <div style="border:1px solid #3f51b5; padding:20px;">
+
+                            <!-- TASK INFO -->
+                            <table style="width:100%;">
+                                <tr>
+                                    <td><strong>TASK:</strong></td>
+                                    <td t-out="doc.task_name"/>
+                                </tr>
+                                <tr>
+                                    <td><strong>Due Date:</strong></td>
+                                    <td t-out="doc.due_date"/>
+                                </tr>
+                                <tr>
+                                    <td><strong>Assign To:</strong></td>
+                                    <td t-out="doc.assign_to_id.name"/>
+                                </tr>
+                                <tr>
+                                    <td><strong>Estimated Time:</strong></td>
+                                    <td>
+                                        <t t-esc="doc.estimate_time or 0"/> H
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <br/>
+
+                            <!-- DESCRIPTION -->
+                            <div>
+                                <strong>Description:</strong>
+                                <p t-out="doc.description"/>
+                            </div>
+
+                            <br/>
+
+                            <!-- TIMESHEET -->
+                            <div style="border:1px solid #3f51b5;">
+
+                                <div style="text-align:center; font-weight:bold; padding:5px;">
+                                    Timesheet
+                                </div>
+
+                                <table style="width:100%; border-collapse: collapse;" border="1">
+
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Time</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        <!-- counter -->
+                                        <t t-set="i" t-value="0"/>
+
+                                        <t t-foreach="doc.task_lines_ids" t-as="line">
+                                            <t t-set="i" t-value="i + 1"/>
+
+                                            <tr>
+                                                <td><t t-out="i"/></td>
+
+                                                <td><t t-out="doc.due_date"/></td>
+
+                                                <td><t t-out="line.line_description"/></td>
+
+                                                <td>
+                                                    <t t-out="line.line_time_takes"/> H
+                                                </td>
+                                            </tr>
+                                        </t>
+
+                                    </tbody>
+
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" style="text-align:center;">
+                                                <strong>Total Time</strong>
+                                            </td>
+                                            <td>
+                                                <strong>
+                                                    <t t-out="doc.total_time or 0"/> H
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                        <br/>
+
+                        <!-- FOOTER -->
+                        <div style="border:1px solid #3f51b5; padding:10px; text-align:center;">
+                            <span t-out="res_company.email"/> |
+                            <span t-out="res_company.phone"/> |
+                            <span t-out="res_company.company_registry"/>
+                        </div>
+
+                        <!-- PAGINATION -->
+                        <div style="text-align:right; font-size:12px;">
+                            Page: <span class="page"/> / <span class="topage"/>
+                        </div>
+
+                    </div>
+
+                </t>
+
+            </t>
+
+        </t>
+
+    </template>
+
+</odoo>
